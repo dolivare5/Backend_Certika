@@ -77,7 +77,7 @@ export class ValorParametro {
     estado?: number;
 
     
-    @ManyToOne(() => Parametro, parametro => parametro.relacion_parametros)
+    @ManyToOne(() => Parametro, parametro => parametro.valores_parametros)
     @JoinColumn({name: 'id_parametro'})
     id_parametro: number;
     

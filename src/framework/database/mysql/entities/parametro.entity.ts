@@ -67,8 +67,8 @@ export class Parametro {
     estado!: number;
     
 
-    @OneToMany(() => ValorParametro, relacionParametros => relacionParametros.id_parametro)
-    relacion_parametros?: ValorParametro[];
+    @OneToMany(() => ValorParametro, relacionParametros => relacionParametros.id_parametro, {eager: true})
+    valores_parametros?: ValorParametro[];
     
     @BeforeInsert()  @BeforeUpdate()
     beforeInsert() {
