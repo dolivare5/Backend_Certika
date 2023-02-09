@@ -1,0 +1,13 @@
+{
+    "editor.codeLensFontFamily": "Jetbrains Mono",
+    "editor.codeLensFontSize": 16,
+    "editor.fontFamily": "Jetbrains Mono",
+    "editor.fontSize": 16,
+    "editor.inlayHints.fontFamily": "Jetbrains Mono",
+    "editor.inlayHints.fontSize": 16,
+    "editor.suggestFontSize": 16,
+    "scm.inputFontFamily": "Jetbrains Mono",
+    "notebook.outputFontSize": 10,
+    "notebook.markup.fontSize": 13,
+    "dotenv.enableAutocloaking": true
+}
