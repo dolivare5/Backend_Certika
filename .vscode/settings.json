@@ -9,5 +9,5 @@
     "scm.inputFontFamily": "Jetbrains Mono",
     "notebook.outputFontSize": 10,
     "notebook.markup.fontSize": 13,
-    "dotenv.enableAutocloaking": true
+    "dotenv.enableAutocloaking": false
 }

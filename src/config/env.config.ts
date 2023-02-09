@@ -8,7 +8,7 @@ export const EnvConfiguration = () => ({
     host: process.env.MYSQL_HOST,
     hostAPI: process.env.HOST_API,
     jwtSecret: process.env.JWT_SECRET,
-    portServer: parseInt(process.env.PORT, 10) || 3004,
+    portServer: parseInt(process.env.PORT_SERVER, 10) || 3004,
     emailHost: process.env.EMAIL_HOST,
     emailPort: parseInt(process.env.EMAIL_PORT, 10) || 587,
     emailUser: process.env.EMAIL_USER,

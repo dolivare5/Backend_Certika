@@ -330,7 +330,7 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
          * Comprobando si el código de error es 23505, que es el código para
          * una violación de restricción única.
          * */
-        if (error.code === '23505') {
+        if (error.errno === 1062) {
             this.exceptions.badRequestException({message: "Ya existe un registro con los datos proporcionados."});
         }
         if (error.code === '23503') {

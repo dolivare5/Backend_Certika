@@ -1,14 +1,14 @@
-import {BadRequestException, Body, Controller, Get,  Patch, Post, Query} from "@nestjs/common";
-import { ParameterService } from './parameter.service';
-import { CreateParameterDto } from './dto/create-parameter.dto';
-import {UpdateParameterDto} from './dto/update-parameter.dto';
+import { BadRequestException, Body, Controller, Get, Patch, Post, Query, Param, ParseIntPipe } from '@nestjs/common';
+import { ParametroService } from './parametro.service';
+import { CrearParametroDto } from './dto/crear-parametro.dto';
+import { ActualizarParametroDto } from './dto/actualizar-parametro.dto';
 import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Parametro} from "../../framework/database/mysql/entities";
 
-@ApiTags("Parameters")
-@Controller('parameters')
-export class ParameterController {
-    constructor(private readonly parameterService: ParameterService) {}
+@ApiTags("Parametros")
+@Controller('parametros')
+export class ParametroController {
+    constructor(private readonly parametroService: ParametroService) {}
     
     @ApiResponse({ status: 201, description: 'Parámetro creado correctamente.', type: Parametro})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
@@ -16,8 +16,8 @@ export class ParameterController {
     @ApiResponse({ status: 403, description: 'Forbidden: Verifique que el token de autenticación sea válido y que no halla expirado.' })
     @ApiResponse({ status: 404, description: 'Not Found: El parámetro no existe.' })
     @Post()
-    create(@Body() createParameterDto: CreateParameterDto) {
-        return this.parameterService.create(createParameterDto);
+    create(@Body() crearParametroDto: CrearParametroDto) {
+        return this.parametroService.create(crearParametroDto);
     }
     
     
@@ -29,7 +29,7 @@ export class ParameterController {
     @ApiResponse({ status: 404, description: 'Not Found: No se encontraron parámetros.' })
     @Get()
     findAll() {
-        return this.parameterService.findAll();
+        return this.parametroService.findAll();
     }
     
     
@@ -39,12 +39,12 @@ export class ParameterController {
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
     @ApiResponse({ status: 403, description: 'Forbidden: Verifique que el token de autenticación sea válido y que no halla expirado.' })
     @ApiResponse({ status: 404, description: 'Not Found: El parámetro no existe.' })
-    @Get()
+    @Get('find-one')
     @ApiQuery({ name: 'id', required: true, type: Number })
-    findOne(query: any) {
+    findOne(@Query() query) {
         const { id } = query;
         if (id && id > 0) {
-            return this.parameterService.findOne(+id);
+            return this.parametroService.findOne(+id);
         }else{
             throw new BadRequestException('El id del parámetro es requerido');
         }
@@ -57,15 +57,8 @@ export class ParameterController {
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
     @ApiResponse({ status: 403, description: 'Forbidden: Verifique que el token de autenticación sea válido y que no halla expirado.' })
     @ApiResponse({ status: 404, description: 'Not Found: El parámetro no existe.' })
-    @Patch()
-    @ApiQuery({ name: 'id', required: true, type: Number })
-    update(@Query() query, @Body() updateParameterDto: UpdateParameterDto) {
-        const { id } = query;
-        if (id && +id > 0) {
-            console.log(updateParameterDto);
-            return this.parameterService.update(+id, updateParameterDto);
-        }else{
-            throw new BadRequestException('El id del parámetro es requerido');
-        }
+    @Patch(':id')
+    update(@Param('id', ParseIntPipe) id: number, @Body() actualizarParametroDto: ActualizarParametroDto) {
+        return this.parametroService.update(+id, actualizarParametroDto);
     }
 }

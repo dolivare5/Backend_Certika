@@ -1,6 +1,6 @@
 import {IsOptional, IsString, MinLength} from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
-export class CreateParameterDto {
+export class CrearParametroDto {
     
     @ApiProperty({
         example: 'Perfiles',
@@ -9,7 +9,7 @@ export class CreateParameterDto {
     })
     @IsString({message: "El nombre de cada parámetro debe ser un texto"})
     @MinLength(3, {message: "El nombre de cada parámetro debe tener al menos 3 caracteres"})
-    name!: string;
+    nombre!: string;
     
     
     @ApiProperty({
@@ -20,7 +20,7 @@ export class CreateParameterDto {
     @IsOptional()
     @IsString({message: "La descripción de cada parámetro debe ser un texto"})
     @MinLength(3, {message: "La descripción de cada parámetro debe tener al menos 3 caracteres"})
-    description?: string;
+    descripcion?: string;
     
     
     @ApiProperty({
