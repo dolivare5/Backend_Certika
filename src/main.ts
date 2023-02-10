@@ -70,7 +70,7 @@ async function main() {
 	/**
      * Configuración del prefijo global para todas las rutas.
      */
-    app.setGlobalPrefix("api/v1/libary/docs");
+    app.setGlobalPrefix("api/v1/libary/");
 	
     /**
      * Exponiendo el documento de Swagger en la ruta /api.

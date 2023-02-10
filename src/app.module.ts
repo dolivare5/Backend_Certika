@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MysqlDatabaseModule } from './framework/database/mysql/mysql-data.module';
 import { ParametroModule } from './modules/parametro/parametro.module';
 import { SwaggerConfig } from './config/swagger/swagger';
+import { UsuarioModule } from './modules/usuario/usuario.module';
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { SwaggerConfig } from './config/swagger/swagger';
 		SwaggerConfig,
 		MysqlDatabaseModule,
 		ParametroModule,
-		ValorParametroModule
+		ValorParametroModule,
+		UsuarioModule
 	],
 	controllers: [],
 	providers: [],

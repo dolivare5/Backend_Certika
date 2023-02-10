@@ -4,9 +4,11 @@ import { CrearValorParametroDto } from './dto/crear-valor_parametro.dto';
 import { ActualizarValorParametroDto } from './dto/actualizar-valor_parametro.dto';
 import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {ValorParametro} from "../../framework/database/mysql/entities";
+import { Auth } from '../usuario/decorators/auth.decorator';
 
 @ApiTags("Valores Parámetros")
 @Controller('valores_parametros')
+@Auth()
 export class ValorParametroController {
     constructor(private readonly valorParametroService: ValorParametroService) {}
     

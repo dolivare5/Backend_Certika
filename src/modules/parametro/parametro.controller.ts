@@ -1,3 +1,4 @@
+import { Auth } from './../usuario/decorators/auth.decorator';
 import { BadRequestException, Body, Controller, Get, Patch, Post, Query, Param, ParseIntPipe } from '@nestjs/common';
 import { ParametroService } from './parametro.service';
 import { CrearParametroDto } from './dto/crear-parametro.dto';
@@ -7,6 +8,7 @@ import {Parametro} from "../../framework/database/mysql/entities";
 
 @ApiTags("Parametros")
 @Controller('parametros')
+@Auth()
 export class ParametroController {
     constructor(private readonly parametroService: ParametroService) {}
     

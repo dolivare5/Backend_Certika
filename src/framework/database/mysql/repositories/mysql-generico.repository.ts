@@ -4,7 +4,7 @@ import { ExceptionsService } from "../../../../config/exceptions/exceptions.serv
 import { FindOptionsWhere } from "typeorm/find-options/FindOptionsWhere";
 import {isNumber} from "class-validator";
 import {v4 as uuidv4} from 'uuid';
-import {SendEmailInterface} from "../../../../modules/mail/interfaces/sendEmail.interface";
+import {SendEmailInterface} from "../../../../modules/mail/interfaces/sendMail.interface";
 import {MailerService} from "@nestjs-modules/mailer";
 import {EnvConfiguration} from "../../../../config/env.config";
 import {ResponseInterface} from "../../../../interfaces/response.interface";
@@ -31,7 +31,6 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
              * Se crea una nueva instancia de la entidad que se recibe como parámetro.
              * */
             const entityInstance: T = this._repository.create(entity);
-            console.log('Se creó la instancia de la entidad: ', entityInstance);
             /**
              * Se guarda la nueva instancia de la entidad en la base de datos.
              */
@@ -66,7 +65,6 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
     async findAll(where?:FindOptionsWhere<T>,relations?:string[]): Promise<T[]> {
         const relationArray = relations ? relations : [];
         const records: T[] = await this._repository.find({where, relations: relationArray});
-        console.log(records);
         if (!records) {
             this.exceptions.notFoundException({message: `No se encontraron registros en la base de datos.`});
         }
@@ -172,17 +170,22 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
          */
         await queryRunner.startTransaction();
         let entityInstance : T;
-        if(typeof id === 'string'){
+
+        if (typeof id === 'string') {
             // @ts-ignore
-            const code_table = await this._repository.findOne({ where: { code: id } });
-            if (!code_table) {
-                this.exceptions.notFoundException({message: `No se encontró el registro`});
-            }
+            entityInstance = await this._repository.findOne({ where: { uuid: id } });
+        } else {
             // @ts-ignore
-            entityInstance = await this._repository.preload({id: code_table.id, ...entity});
-        }else{
-            entityInstance = await this._repository.preload({ id, ...entity});
+            entityInstance = await this._repository.findOne({ where: { id: id } });
         }
+
+        if (!entityInstance) {
+            this.exceptions.notFoundException({message: `No se encontró el registro`});
+        }
+
+        // @ts-ignore
+        entityInstance = await this._repository.preload({...entityInstance, ...entity});
+
         /**
          * Si no se encuentra la acción de permiso, se lanza una excepción.
          */
@@ -271,8 +274,8 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
     
     
     async sendMail(sendEmail: SendEmailInterface, mailerService: MailerService) {
-        const {mail, action, subject, template, name, code_auth, from_email, method} = sendEmail;
-        const url = `${EnvConfiguration().hostAPI}/users/${action}/${code_auth}`;
+        const {mail, action, subject, template, name, codigo_de_verificacion, from_email, method} = sendEmail;
+        const url = new URL(`${EnvConfiguration().hostAPI}/usuarios/${action}?codigo_de_verificacion=${codigo_de_verificacion}`);
         await mailerService.sendMail({
             to: `${mail}`,
             from: ` "Support Team"  <${from_email}>`,
@@ -282,7 +285,7 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
                 name: `${name}`,
                 url,
                 method,
-                code_auth,
+                codigo_de_verificacion,
             }
         });
     }
@@ -333,6 +336,11 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
         if (error.errno === 1062) {
             this.exceptions.badRequestException({message: "Ya existe un registro con los datos proporcionados."});
         }
+
+        if (error.errno === 1364) {
+            this.exceptions.badRequestException({message: "Los datos proporcionados no son válidos."});
+        }
+
         if (error.code === '23503') {
             this.exceptions.badRequestException({message: "Los datos proporcionados no son válidos."});
         }

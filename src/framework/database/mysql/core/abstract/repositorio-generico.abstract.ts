@@ -1,6 +1,6 @@
 import { FindOptionsWhere } from "typeorm/find-options/FindOptionsWhere";
 import { DeepPartial, FindOneOptions } from "typeorm";
-import {SendEmailInterface} from "../../../../../modules/mail/interfaces/sendEmail.interface";
+import {SendEmailInterface} from "../../../../../modules/mail/interfaces/sendMail.interface";
 import {MailerService} from "@nestjs-modules/mailer";
 import {ResponseInterface} from "../../../../../interfaces/response.interface";
 

@@ -43,11 +43,9 @@ export class RegistrosDeUsuarios {
         description: 'Fecha de salida del sistema',
     })
     @Column('timestamp', {
-        nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
-        onUpdate: 'CURRENT_TIMESTAMP',
+        nullable: true,
     })
-    fecha_salida!: Date;
+    fecha_salida?: Date;
 
 
     @ApiProperty({
@@ -65,20 +63,10 @@ export class RegistrosDeUsuarios {
         example: '2021-01-01 00:00:00',
         description: 'Fecha de expiración del token',
     })
-    @Column('date', {
+    @Column('timestamp', {
         nullable: false,
     })
     fecha_expiracion!: Date;
-
-
-    @ApiProperty({
-        example: '2021-01-01 00:00:00',
-        description: 'Fecha de creación del token',
-    })
-    @Column('date', {
-        nullable: false,
-    })
-    fecha_creacion_token!: Date;
 
 
     @ApiProperty({

@@ -19,6 +19,28 @@ export class Usuario {
     id?: number;
 
     @ApiProperty({
+        example: 'ggrvs-123456789',
+        description: 'Código de verificación de cada usuario',	
+    })
+    @Column('varchar', {
+        nullable: true,
+        length: 100,
+        unique: true,
+    })
+    codigo_de_verificacion?: string;
+
+    @ApiProperty({
+        example: 'ggrvs-bnmjbvnjb-hghgffdgfhg',
+        description: 'Código único de cada usuario (UUID)',	
+    })
+    @Column('varchar', {
+        nullable: true,
+        length: 100,
+        unique: true,
+    })
+    uuid?: string;
+
+    @ApiProperty({
         example: 'Juan',
         description: 'Nombre del usuario',
     })
@@ -93,14 +115,14 @@ export class Usuario {
         nullable: false,
         default: false,
     })
-    loging_google!: boolean;
+    loging_google?: boolean;
 
 
     @Column('boolean', {
         nullable: false,
         default: false,
     })
-    loging_facebook!: boolean;
+    loging_facebook?: boolean;
 
     @ApiProperty({
         example: '123456',
@@ -137,7 +159,7 @@ export class Usuario {
         nullable: false,
         default: () => 'CURRENT_TIMESTAMP',
     })
-    fecha_de_creacion!: Date;
+    fecha_de_creacion?: Date;
 
     @ApiProperty({
         example: '2021-10-10',
@@ -148,7 +170,7 @@ export class Usuario {
         default: () => 'CURRENT_TIMESTAMP',
         onUpdate: 'CURRENT_TIMESTAMP',
     })
-    fecha_de_actualizacion!: Date;
+    fecha_de_actualizacion?: Date;
 
     @ApiProperty({
         example: 1,
@@ -156,8 +178,19 @@ export class Usuario {
     })
     @Column('int', {
         nullable: false,
+        default: 1,
     })
-    estado!: number;
+    estado?: number;
+
+    @ApiProperty({
+        example: 1,
+        description: 'Identificador único que indica si el usuario está activo o no',
+    })
+    @Column('int', {
+        nullable: false,
+        default: false,
+    })
+    is_active?: boolean;
 
     @OneToMany(() => RegistrosDeUsuarios, registrosDeUsuarios => registrosDeUsuarios.id_usuario)
     registrosDeUsuarios?: RegistrosDeUsuarios[];

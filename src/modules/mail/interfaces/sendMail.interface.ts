@@ -5,7 +5,7 @@ export interface SendEmailInterface {
     subject: string;
     template: string;
     name: string;
-    code_auth?: string;
+    codigo_de_verificacion?: string;
     method?: methods;
 }
 
@@ -13,5 +13,6 @@ export enum methods {
     get = 'get',
     post = 'post',
     put = 'put',
-    delete = 'delete'
+    delete = 'delete',
+    patch = 'patch'
 }
