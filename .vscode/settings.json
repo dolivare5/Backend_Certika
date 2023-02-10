@@ -9,5 +9,18 @@
     "scm.inputFontFamily": "Jetbrains Mono",
     "notebook.outputFontSize": 10,
     "notebook.markup.fontSize": 13,
-    "dotenv.enableAutocloaking": false
+    "dotenv.enableAutocloaking": false,
+    "DockerRun.DisableDockerrc": true,
+    "DockerRun.Containers": [
+        "6878685fc221"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/node_modules": true
+    }
 }

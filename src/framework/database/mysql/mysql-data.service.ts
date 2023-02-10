@@ -3,24 +3,41 @@ import {
     IRepositorioValorParametro,
     IRepositorioParametro,
     IRepositorioUsuario,
-    IRepositorioRegistrosDeUsuarios
+    IRepositorioRegistrosDeUsuarios,
+    IRepositorioAutor,
+    IRepositorioLibro,
+    IRepositorioEditorial,
+    IRepositorioCategoria
 } from "./core/abstract";
 
 
 import {
-    MysqlRepositorioParametro, MysqlRepositorioValorParametro, MysqlRepositorioUsuario, MysqlRepositorioRegistrosDeUsuarios
+    MysqlRepositorioParametro, 
+    MysqlRepositorioValorParametro, 
+    MysqlRepositorioUsuario, 
+    MysqlRepositorioRegistrosDeUsuarios,
+    MysqlRepositorioAutor,
+    MysqlRepositorioLibro,
+    MysqlRepositorioEditorial,
+    MysqlRepositorioCategoria
 } from "./repositories";
 
 
 import { InjectRepository } from "@nestjs/typeorm";
 import { DataSource, Repository } from "typeorm";
 import {
-    Parametro, ValorParametro, Usuario
+    Parametro, 
+    ValorParametro, 
+    Usuario, 
+    RegistrosDeUsuarios,
+    Autor,
+    Libro,
+    Editorial,
+    Categoria
 } from "./entities";
 
 import {ExceptionsService} from "../../../config/exceptions/exceptions.service";
 import { IBaseDeDatosAbstract } from "./core/abstract/base_de_datos.abstract";
-import { RegistrosDeUsuarios } from './entities/registros_de_usuarios.entity';
 
 @Injectable()
 export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplicationBootstrap {
@@ -29,6 +46,10 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
     public valorParametro: IRepositorioValorParametro<ValorParametro>;
     public usuario: IRepositorioUsuario<Usuario>;
     public registrosDeUsuarios: IRepositorioRegistrosDeUsuarios<RegistrosDeUsuarios>;
+    public autor: IRepositorioAutor<Autor>;
+    public libro: IRepositorioLibro<Libro>;
+    public editorial: IRepositorioEditorial<Editorial>;
+    public categoria: IRepositorioCategoria<Categoria>;
 
     
     constructor(
@@ -36,6 +57,10 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
         @InjectRepository(ValorParametro) private readonly repositorioValorParametro: Repository<ValorParametro>,
         @InjectRepository(Usuario) private readonly repositorioUsuario: Repository<Usuario>,
         @InjectRepository(RegistrosDeUsuarios) private readonly repositorioRegistrosDeUsuarios: Repository<RegistrosDeUsuarios>,
+        @InjectRepository(Autor) private readonly repositorioAutor: Repository<Autor>,
+        @InjectRepository(Libro) private readonly repositorioLibro: Repository<Libro>,
+        @InjectRepository(Editorial) private readonly repositorioEditorial: Repository<Editorial>,
+        @InjectRepository(Categoria) private readonly repositorioCategoria: Repository<Categoria>,
         private readonly dataSource: DataSource
     ) {
     }
@@ -46,5 +71,9 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
         this.valorParametro = new MysqlRepositorioValorParametro(this.repositorioValorParametro, this.dataSource, new ExceptionsService());
         this.usuario = new MysqlRepositorioUsuario(this.repositorioUsuario, this.dataSource, new ExceptionsService());
         this.registrosDeUsuarios = new MysqlRepositorioRegistrosDeUsuarios(this.repositorioRegistrosDeUsuarios, this.dataSource, new ExceptionsService());
+        this.autor = new MysqlRepositorioAutor(this.repositorioAutor, this.dataSource, new ExceptionsService());
+        this.libro = new MysqlRepositorioLibro(this.repositorioLibro, this.dataSource, new ExceptionsService());
+        this.editorial = new MysqlRepositorioEditorial(this.repositorioEditorial, this.dataSource, new ExceptionsService());
+        this.categoria = new MysqlRepositorioCategoria(this.repositorioCategoria, this.dataSource, new ExceptionsService());
     };
 }

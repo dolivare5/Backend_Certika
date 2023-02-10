@@ -3,3 +3,7 @@ export * from "./mysql-valor_parametro.repository";
 export * from "./mysql-generico.repository";
 export * from "./mysql-usuario.repository";
 export * from "./mysql-registros_de_usuarios.repository";
+export * from "./mysql-editorial.repository";
+export * from "./mysql-autor.repository";
+export * from "./mysql-categoria.repository";
+export * from "./mysql-libro.repository";
