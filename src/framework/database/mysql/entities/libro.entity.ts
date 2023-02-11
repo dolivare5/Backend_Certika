@@ -9,7 +9,7 @@ import {
     PrimaryGeneratedColumn
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
-import { DetallesPrestamo, Inventario, Editorial, Categoria, Autor } from './';
+import { Prestamo, Inventario, Editorial, Categoria, Autor } from './';
 
 @Entity({ name: 'libro' })
 export class Libro {
@@ -101,7 +101,7 @@ export class Libro {
     @Column('int', {
         nullable: false,
     })
-    tipo_de_libro!: number;
+    id_tipo_de_libro!: number;
 
 
     @ApiProperty({
@@ -133,8 +133,8 @@ export class Libro {
     @JoinColumn({ name: 'id_categoria' })
     id_categoria!: number;
 
-    @OneToMany(() => DetallesPrestamo, detalles_prestamo => detalles_prestamo.id_libro)
-    detalles_prestamos?: DetallesPrestamo[];
+    @OneToMany(() => Prestamo, prestamo => prestamo.id_libro)
+    prestamos?: Prestamo[];
 
 
     @ApiProperty({
@@ -160,9 +160,9 @@ export class Libro {
     })
     @Column('timestamp', {
         nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
+        default: () => 'ON INSERT CURRENT_TIMESTAMP()',
     })
-    fecha_de_creacion!: Date;
+    fecha_de_creacion?: Date;
 
 
     @ApiProperty({
@@ -171,21 +171,28 @@ export class Libro {
         nullable: false,
     })
     @Column('timestamp', {
-        nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
+        nullable: true,
+        onUpdate: 'CURRENT_TIMESTAMP()',
     })
-    fecha_de_actualizacion!: Date;
+    fecha_de_actualizacion?: Date;
 
 
-    @BeforeInsert()
-    @BeforeUpdate()
-    upperCase() {
-        this.nombre = this.nombre.toUpperCase();
-        this.descripcion = this.descripcion.toUpperCase();
-        this.portada = this.portada.toUpperCase();
-        this.lugar_de_edicion = this.lugar_de_edicion.toUpperCase();
-        this.codigo_isbn = this.codigo_isbn.toUpperCase();
-    }
+    @Column('int', {
+        nullable: false,
+        default: 1,
+    })
+    estado?: number;
+
+    @ApiProperty({
+        example: 30,
+        description: 'Cantidad de libros adquiridos',
+        nullable: false,
+    })
+    @Column('int', {
+        nullable: false,
+        default: 0,
+    })
+    cantidad?: number;
 }
 
 

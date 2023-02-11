@@ -10,7 +10,7 @@ export abstract class IRepositorioGenerico<T> {
     
     public abstract findFromCode(code:string): Promise<T>;
     
-    public abstract findOne(options: FindOneOptions<T>, entity: string, ignoreAuth?:boolean): Promise<T | null>;
+    public abstract findOne(options: FindOneOptions<T>, entity: string, lanzarExepcion?:boolean): Promise<T | null>;
     
     public abstract searchPaginatedCondition(page: number, limit: number, where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<[T[], number]>;
     

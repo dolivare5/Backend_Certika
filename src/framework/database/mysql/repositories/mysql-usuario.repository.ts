@@ -18,9 +18,6 @@ import { JwtService } from '@nestjs/jwt';
 export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> implements IRepositorioUsuario<T>{
     public async registrarUsuario(usuario: DeepPartial<T>, mailerService: MailerService): Promise<Object> {
         const { password, ...datosDelUsuario } = usuario as CrearUsuarioDto;
-        console.log('====================================');
-        console.log('datosDelUsuario', datosDelUsuario);
-        console.log('====================================');
         // @ts-ignore
         const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento}`))[0];
         if(existTypeDocument){
@@ -48,23 +45,28 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
                 }
         
                 await this.sendMail(mail, mailerService);
-                return { usuario: usuarioARegistrar, message: 'Usuario registrado exitosamente, revise su correo para confirmar su cuenta'};
+                return { message: 'Usuario registrado exitosamente, revise su correo para confirmar su cuenta'};
             }
         }
     }
 
     public async iniciarSesion(usuario: DeepPartial<T>, jwtService: JwtService): Promise<Object> {
         const { correo, password, token } = usuario as IniciarSesionDto;
+
         let usuarioAIniciarSesion: Usuario;
         if(correo && password){
             // @ts-ignore
             usuarioAIniciarSesion = await this.findOne({ where: { correo}}) as Usuario;
             if(!usuarioAIniciarSesion || !bcrypt.compareSync(password, usuarioAIniciarSesion.password)){
-                throw new Error('Datos de inicio de sesión incorrectos');
+                this.exceptions.badRequestException({message: 'Datos de inicio de sesión incorrectos'});
             }
             // @ts-ignore
             if(usuarioAIniciarSesion.estado !== 1){
                 this.exceptions.forbiddenException({ message:'Su cuenta no ha sido eliminada o desactivada. Por favor, contacte con el administrador del sistema'});
+            }
+
+            if(!usuarioAIniciarSesion.is_active){
+                this.exceptions.forbiddenException({ message:'Su cuenta no ha sido activada. Por favor, revise su correo para activar su cuenta'});
             }
         }
 
@@ -72,26 +74,26 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
             // Verificar si el token es válido y si pertenece a un usuario de google o facebook
         }
 
+
+        if(correo === undefined && password === undefined && token === undefined){
+            this.exceptions.badRequestException({ message: 'Debe enviar los datos de inicio de sesión'});
+        }
+
+        if(correo !== undefined && password === undefined && token === undefined){
+            this.exceptions.badRequestException({ message: 'Debe enviar la contraseña'});
+        }
+
+        if(correo === undefined && password !== undefined && token === undefined){
+            this.exceptions.badRequestException({ message: 'Debe enviar el correo'});
+        }
+
         const token_auth = this.getToken({uuid: usuarioAIniciarSesion.uuid}, jwtService);
-        delete usuarioAIniciarSesion.password;
-        return { ...usuarioAIniciarSesion, token_auth };
+        const is_admin = usuarioAIniciarSesion.id_rol === 1 ? true : false;
+        return { ...usuarioAIniciarSesion, token_auth, is_admin  };
 
     }
-    public updateUser(user: T): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    public deleteUser(user: T): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    public getUser(user: T): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    public getUsers(): Promise<T[]> {
-        throw new Error("Method not implemented.");
-    }
-    public getUserByToken(token: string): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
+
+
     public async existsUser(user: DeepPartial<T>): Promise<boolean> {
         const { correo, nombre, apellido, nro_documento } = user as Usuario;
         const exist = await this.executeQuery(`
@@ -116,7 +118,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
         if(usuario){
             // @ts-ignore
             const usuarioActualizado : Usuario = await this.update(usuario.uuid, { is_active: true, codigo_de_verificacion: generateCodeAuth() });
-            return { usuario: usuarioActualizado, message: 'Cuenta confirmada exitosamente'};
+            return { message: 'Cuenta confirmada exitosamente'};
         }
         this.exceptions.forbiddenException({ message: 'El código de verificación no es válido' });
     }

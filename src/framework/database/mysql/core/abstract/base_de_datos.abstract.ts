@@ -1,4 +1,4 @@
-import { RegistrosDeUsuarios, Parametro, ValorParametro, Usuario, Autor, Categoria, Libro, Editorial } from '../../entities';
+import { RegistrosDeUsuarios, Parametro, ValorParametro, Usuario, Autor, Categoria, Libro, Editorial, Prestamo, Inventario } from '../../entities';
 
 import {
     IRepositorioParametro,
@@ -8,7 +8,9 @@ import {
     IRepositorioAutor,
     IRepositorioEditorial,
     IRepositorioLibro,
-    IRepositorioCategoria
+    IRepositorioCategoria,
+    IRepositorioPrestamo,
+    IRepositorioInventario
 } from ".";
 
 
@@ -21,4 +23,6 @@ export abstract class IBaseDeDatosAbstract {
     public abstract readonly editorial: IRepositorioEditorial<Editorial>;
     public abstract readonly libro: IRepositorioLibro<Libro>;
     public abstract readonly categoria: IRepositorioCategoria<Categoria>;
+    public abstract readonly prestamo: IRepositorioPrestamo<Prestamo>;
+    public abstract readonly inventario: IRepositorioInventario<Inventario>;
 }

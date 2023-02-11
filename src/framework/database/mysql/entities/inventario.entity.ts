@@ -54,7 +54,6 @@ export class Inventario {
     })
     @Column('bigint', {
         nullable: false,
-        default: 0,
     })
     libros_disponibles!: number;
 
@@ -75,9 +74,8 @@ export class Inventario {
         description: 'Fecha de actualización del libro',
     })
     @Column('timestamp', {
-        nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
-        onUpdate: 'CURRENT_TIMESTAMP',
+        nullable: true,
+        onUpdate: 'CURRENT_TIMESTAMP()',
     })
     fecha_de_actualizacion!: Date;
 
@@ -89,6 +87,6 @@ export class Inventario {
         nullable: false,
         default: 1,
     })
-    estado!: number;
+    estado?: number;
 
 }

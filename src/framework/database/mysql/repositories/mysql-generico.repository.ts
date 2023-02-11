@@ -31,16 +31,20 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
              * Se crea una nueva instancia de la entidad que se recibe como parámetro.
              * */
             const entityInstance: T = this._repository.create(entity);
+            
             /**
              * Se guarda la nueva instancia de la entidad en la base de datos.
              */
-            await this._repository.save(entityInstance);
+            const entitySaved = await this._repository.save(entityInstance);
             
             /**
              * Se retorna la nueva instancia de la entidad que se acaba de guardar en la base de datos.
              */
-            return entityInstance;
+            return entitySaved;
         } catch (error) {
+            console.log(error);
+            
+            
             /**
              * Si ocurre un error, se maneja el error.
              */
@@ -49,16 +53,18 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
     }
     
     
-    async findOne(options: FindOneOptions<T>, entity: string, ignoreAuth:boolean = false): Promise<T> | null {
-        const entityInstance: T = await this._repository.findOne(options);
-        if (!entityInstance) this.exceptions.notFoundException({message: `${entity} no se encontró en la base de datos.`});
-        // @ts-ignore
-        if (entityInstance.state === 0) this.exceptions.notFoundException({message: `El recurso solicitado no se encuentra disponible por el momento. Contacte al administrador.`});
-        if(!ignoreAuth){
+    async findOne(options: FindOneOptions<T>, entity: string, lanzarExepcion:boolean = true): Promise<T> | null {
+
+        try{
+            const entityInstance: T = await this._repository.findOne(options);
+            
+            if (!entityInstance && lanzarExepcion) this.exceptions.notFoundException({message: `${entity} no se encontró en la base de datos.`});
             // @ts-ignore
-            if (entityInstance.isActive === 0) this.exceptions.forbiddenException({message: 'Por favor, verifique su correo electrónico para activar su cuenta.'});
+            if (entityInstance.estado !== 1) this.exceptions.notFoundException({message: `El recurso solicitado no se encuentra disponible por el momento. Contacte al administrador.`});
+            return entityInstance;
+        }catch (error) {
+            if(lanzarExepcion)  this.handleDBExceptions(error);
         }
-        return entityInstance;
     }
     
     

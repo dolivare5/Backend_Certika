@@ -66,7 +66,7 @@ export class Editorial {
         nullable: false,
         default: 1,
     })
-    estado!: number;
+    estado?: number;
 
 
     @ApiProperty({
@@ -76,10 +76,10 @@ export class Editorial {
     })
     @Column('timestamp', {
         nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
+        default: () => 'ON INSERT CURRENT_TIMESTAMP()',
     })
 
-    fecha_de_creacion!: Date;
+    fecha_de_creacion?: Date;
 
 
 
@@ -90,8 +90,7 @@ export class Editorial {
     })
     @Column('timestamp', {
         nullable: true,
-        default: () => 'CURRENT_TIMESTAMP',
-        onUpdate: 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP()',
     })
 
     fecha_de_actualizacion?: Date;

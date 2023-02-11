@@ -24,7 +24,7 @@ export class RegistrosDeUsuarios {
         example: 1,
         description: 'Identificador único del usuario',
     })
-    @ManyToOne(() => Usuario, usuario => usuario.registrosDeUsuarios)
+    @ManyToOne(() => Usuario, usuario => usuario.registrosDeUsuarios, { eager: true })
     @JoinColumn({ name: 'id_usuario' })
     id_usuario!: number;
 

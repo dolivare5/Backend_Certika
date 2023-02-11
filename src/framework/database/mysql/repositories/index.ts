@@ -7,3 +7,5 @@ export * from "./mysql-editorial.repository";
 export * from "./mysql-autor.repository";
 export * from "./mysql-categoria.repository";
 export * from "./mysql-libro.repository";
+export * from "./mysql-prestamo.repository";
+export * from "./mysql-inventario.repository";

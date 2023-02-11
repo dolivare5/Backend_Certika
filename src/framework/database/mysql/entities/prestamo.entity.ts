@@ -5,13 +5,12 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
-import {DetallesPrestamo, Usuario} from '.'
+import {Usuario, Libro} from '.'
 
-@Entity({ name: 'pestamo' })
+@Entity({ name: 'prestamo' })
 export class Prestamo {
     @ApiProperty({
         example: 1,
@@ -28,27 +27,84 @@ export class Prestamo {
     @JoinColumn({ name: 'id_usuario' })
     id_usuario!: number;
 
+
     @ApiProperty({
-        example: '2021-01-01',
-        description: 'Fecha de prestamo',
+        example: 1,
+        description: 'Identificador único del libro',
     })
-    @Column('date', {
+    @ManyToOne(() => Libro, libro => libro.prestamos)
+    @JoinColumn({ name: 'id_libro' })
+    id_libro!: number;
+
+    
+
+    @ApiProperty({
+        example: 1,
+        description: 'Cantidad de libros',
+    })
+    @Column('int', {
         nullable: false,
+        default: 1,
     })
-    fecha_prestamo!: Date;
+    cantidad!: number;
+
 
     @ApiProperty({
         example: 1,
         description: 'Estado del prestamo',
     })
-    @Column('bigint', {
+    @Column('int', {
+        default: 1,
         nullable: false,
     })
-    estado!: number;
+    estado?: number;
 
-    @OneToMany(() => DetallesPrestamo, detallesPrestamo => detallesPrestamo.id_prestamo)
-    detallesPrestamos!: DetallesPrestamo[];
 
+    @ApiProperty({
+        example: '2023-01-01 00:00:00',
+        description: 'Fecha de devolución',
+    })
+    @Column('datetime', {
+        nullable: false,
+    })
+    fecha_devolucion!: Date;
+
+
+    
+    @ApiProperty({
+        example: true,
+        description: 'Libro devuelto',
+    })
+    @Column('boolean', {
+        nullable: false,
+        default: false,
+    })
+    devuelto?: boolean;
+
+
+
+    @ApiProperty({
+        example: '2021-01-01 00:00:00',
+        description: 'Fecha en la que el usuario devolvió el libro',
+    })
+    @Column('timestamp', {
+        nullable: true,
+        onUpdate: 'CURRENT_TIMESTAMP()',
+    })
+    fecha_devolucion_real?: Date;
+
+
+    @ApiProperty({
+        example: '2021-01-01',
+        description: 'Fecha de prestamo',
+    })
+    @Column('timestamp', {
+        nullable: false,
+        default: () => 'CURRENT_TIMESTAMP()',
+    })
+    fecha_prestamo?: Date;
+
+    
     @ApiProperty({
         example: 'Observaciones',
         description: 'Observaciones',
@@ -56,7 +112,5 @@ export class Prestamo {
     @Column('text', {
         nullable: true,
     })
-    observaciones!: string;
-    
-
+    observaciones?: string;
 }

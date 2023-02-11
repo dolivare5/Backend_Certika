@@ -7,7 +7,9 @@ import {
     IRepositorioAutor,
     IRepositorioLibro,
     IRepositorioEditorial,
-    IRepositorioCategoria
+    IRepositorioCategoria,
+    IRepositorioPrestamo,
+    IRepositorioInventario
 } from "./core/abstract";
 
 
@@ -19,7 +21,9 @@ import {
     MysqlRepositorioAutor,
     MysqlRepositorioLibro,
     MysqlRepositorioEditorial,
-    MysqlRepositorioCategoria
+    MysqlRepositorioCategoria,
+    MysqlRepositorioPrestamo,
+    MysqlRepositorioInventario
 } from "./repositories";
 
 
@@ -33,7 +37,9 @@ import {
     Autor,
     Libro,
     Editorial,
-    Categoria
+    Categoria,
+    Prestamo,
+    Inventario
 } from "./entities";
 
 import {ExceptionsService} from "../../../config/exceptions/exceptions.service";
@@ -50,6 +56,8 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
     public libro: IRepositorioLibro<Libro>;
     public editorial: IRepositorioEditorial<Editorial>;
     public categoria: IRepositorioCategoria<Categoria>;
+    public prestamo: IRepositorioPrestamo<Prestamo>;
+    public inventario: IRepositorioInventario<Inventario>;
 
     
     constructor(
@@ -61,6 +69,8 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
         @InjectRepository(Libro) private readonly repositorioLibro: Repository<Libro>,
         @InjectRepository(Editorial) private readonly repositorioEditorial: Repository<Editorial>,
         @InjectRepository(Categoria) private readonly repositorioCategoria: Repository<Categoria>,
+        @InjectRepository(Prestamo) private readonly repositorioPrestamo: Repository<Prestamo>,
+        @InjectRepository(Inventario) private readonly repositorioInventario: Repository<Inventario>,
         private readonly dataSource: DataSource
     ) {
     }
@@ -75,5 +85,7 @@ export class MysqlDatabaseService implements IBaseDeDatosAbstract, OnApplication
         this.libro = new MysqlRepositorioLibro(this.repositorioLibro, this.dataSource, new ExceptionsService());
         this.editorial = new MysqlRepositorioEditorial(this.repositorioEditorial, this.dataSource, new ExceptionsService());
         this.categoria = new MysqlRepositorioCategoria(this.repositorioCategoria, this.dataSource, new ExceptionsService());
+        this.prestamo = new MysqlRepositorioPrestamo(this.repositorioPrestamo, this.dataSource, new ExceptionsService());
+        this.inventario = new MysqlRepositorioInventario(this.repositorioInventario, this.dataSource, new ExceptionsService());
     };
 }

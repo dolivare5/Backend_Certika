@@ -1,6 +1,5 @@
 export * from './autor.entity';
 export * from './categoria.entity';
-export * from './detalles_prestamo.entity';
 export * from './editorial.entity';
 export * from './inventario.entity';
 export * from './libro.entity';

@@ -1,4 +1,3 @@
-
 export * from './repositorio-parametro.abstract';
 export * from './repositorio-valor_parametro.abstract';
 export * from './repositorio-generico.abstract';
@@ -9,3 +8,5 @@ export * from './repositorio-editorial.abstract';
 export * from './repositorio-autor.abstract';
 export * from './repositorio-categoria.abstract';
 export * from './repositorio-libro.abstract';
+export * from './repositorio-prestamo.abstract';
+export * from './repositorio-inventario.abstract';

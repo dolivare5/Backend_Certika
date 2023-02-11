@@ -62,12 +62,12 @@ export class Autor {
         description: 'Estado del autor',
         nullable: false,
     })
-    @Column('boolean', {
+    @Column('int', {
         nullable: false,
-        default: true,
+        default: 1,
     })
 
-    estado!: boolean;
+    estado?: number;
 
 
     @ApiProperty({
@@ -76,20 +76,20 @@ export class Autor {
     })
     @Column('timestamp', {
         nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
+        default: () => 'ON INSERT CURRENT_TIMESTAMP()'
     })
-    fecha_de_creacion!: Date;
+    fecha_de_creacion?: Date;
 
 
     @ApiProperty({
         description: 'Fecha de actualización del autor',
-        nullable: false,
+        nullable: true,
     })
     @Column('timestamp', {
-        nullable: false,
-        default: () => 'CURRENT_TIMESTAMP',
+        nullable: true,
+        onUpdate: 'CURRENT_TIMESTAMP()',
     })
-    fecha_de_actualizacion!: Date;
+    fecha_de_actualizacion?: Date;
 
 
     @BeforeInsert()
