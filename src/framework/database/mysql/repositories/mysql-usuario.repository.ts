@@ -27,7 +27,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
             if(!(await this.existsUser(usuario))){
                 const usuarioARegistrar ={
                     ...datosDelUsuario,
-                    codigo_de_verifie modifico cacion: generateCodeAuth(),
+                    codigo_de_verificacion: generateCodeAuth(),
                     codigo_de_usuario: this.generateCodeUuId(),
                     password: bcrypt.hashSync(password, 10),
                     estado: 1,
