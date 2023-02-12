@@ -17,14 +17,17 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> implements IRepositorioUsuario<T>{
     public async registrarUsuario(usuario: DeepPartial<T>, mailerService: MailerService): Promise<Object> {
+        console.log('Creando usuario');
+        
         const { password, ...datosDelUsuario } = usuario as CrearUsuarioDto;
         // @ts-ignore
         const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento}`))[0];
-        if(existTypeDocument){
+        if(!existTypeDocument){
+            
             if(!(await this.existsUser(usuario))){
                 const usuarioARegistrar ={
                     ...datosDelUsuario,
-                    codigo_de_verificacion: generateCodeAuth(),
+                    codigo_de_verifie modifico cacion: generateCodeAuth(),
                     codigo_de_usuario: this.generateCodeUuId(),
                     password: bcrypt.hashSync(password, 10),
                     estado: 1,
@@ -32,6 +35,8 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
                 };
                 // @ts-ignore
                 await this.create(usuarioARegistrar);
+                console.log('Usuario creado');
+                
                 delete usuarioARegistrar.password;
                 const mail : SendEmailInterface = {
                     mail: usuarioARegistrar.correo,
@@ -48,6 +53,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
                 return { message: 'Usuario registrado exitosamente, revise su correo para confirmar su cuenta'};
             }
         }
+        this.exceptions.badRequestException({ message: 'Ya existe un usuario con el mismo correo, nombre, apellido o número de documento'});
     }
 
     public async iniciarSesion(usuario: DeepPartial<T>, jwtService: JwtService): Promise<Object> {
