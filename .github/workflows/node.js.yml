@@ -21,6 +21,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        yarn: true
-    - run: npx yarn start:dev
+    - run: npm start:dev
     - run: pm2 reload 0
