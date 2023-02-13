@@ -1,4 +1,4 @@
 export enum RolesPermitidos{
-    administrador = 'administrador',
+    administrador = 'administrador/a',
     usuario_conencional = 'usuario convencional',
 }
