@@ -33,12 +33,13 @@ export class UserRoleGuard implements CanActivate {
                 WHERE ru.token = '${token}' AND ru.fecha_salida IS NULL
                 
             `))[0] ;
-            console.log(tipoDeUsuario);
-            console.log(roles_permitidos);
             
             
             
-            if(!roles_permitidos || roles_permitidos.length === 0) roles_permitidos = [RolesPermitidos.usuario_conencional];
+            if(!roles_permitidos || roles_permitidos.length === 0) {
+                roles_permitidos = [RolesPermitidos.usuario_conencional, RolesPermitidos.administrador];
+            }
+            
             if(roles_permitidos.includes(tipoDeUsuario.rol)) return true;
             
             this.exceptionService.forbiddenException({message: 'No tienes permisos para acceder a este recurso'});
