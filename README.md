@@ -1,6 +1,6 @@
 <div style="display: flex; justify-content: space-between; align-items: center" >
     <a href="https://nestjs.com/" target="blank">
-        <img src="public/img_certika.png" alt="CVCAR">
+        <img src="https://certika.co/wp-content/uploads/2022/02/blindamos-tu-certificado-diploma-o-insignia-digital-con-la-tecnologia-blockchain-1.png" alt="Certika">
     </a>
 
 </div>
