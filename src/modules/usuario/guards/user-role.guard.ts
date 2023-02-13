@@ -34,7 +34,12 @@ export class UserRoleGuard implements CanActivate {
                 
             `))[0] ;
             
-            if(!roles_permitidos || roles_permitidos.length === 0) roles_permitidos = [RolesPermitidos.usuario_conencional];
+            
+            
+            if(!roles_permitidos || roles_permitidos.length === 0) {
+                roles_permitidos = [RolesPermitidos.usuario_conencional, RolesPermitidos.administrador];
+            }
+            
             if(roles_permitidos.includes(tipoDeUsuario.rol)) return true;
             
             this.exceptionService.forbiddenException({message: 'No tienes permisos para acceder a este recurso'});
