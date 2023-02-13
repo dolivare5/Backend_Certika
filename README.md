@@ -21,7 +21,7 @@ $ docker-compose -f docker-compose.yaml --env-file .env up --build -d
 ## Running the app
 ### Nota:
 * Para ejecutar la aplicación se debe tener instalado Docker y Docker Compose.
-* Antes de correr el servidor debe abrir la aplicación de docker y activar el servicio de PostgresSQL.
+* Antes de correr el servidor debe abrir la aplicación de docker y activar el servicio de MYSQL.
 ```bash
 # development
 $ npx yarn start
