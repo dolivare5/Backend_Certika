@@ -1,4 +1,4 @@
-import { Injectable, Patch } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MysqlRepositorioGenerico } from './';
 import { IRepositorioUsuario } from '../core/abstract';
 import { DeepPartial } from 'typeorm';
@@ -21,21 +21,19 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
         
         const { password, ...datosDelUsuario } = usuario as CrearUsuarioDto;
         // @ts-ignore
-        const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento}`))[0];
-        if(!existTypeDocument){
-            
+        const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento} AND id_parametro = 3`)).length > 0;
+        if(existTypeDocument){     
             if(!(await this.existsUser(usuario))){
                 const usuarioARegistrar ={
                     ...datosDelUsuario,
                     codigo_de_verificacion: generateCodeAuth(),
-                    codigo_de_usuario: this.generateCodeUuId(),
+                    uuid: this.generateCodeUuId(),
                     password: bcrypt.hashSync(password, 10),
                     estado: 1,
                     id_rol: 1
                 };
                 // @ts-ignore
                 await this.create(usuarioARegistrar);
-                console.log('Usuario creado');
                 
                 delete usuarioARegistrar.password;
                 const mail : SendEmailInterface = {
@@ -53,7 +51,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
                 return { message: 'Usuario registrado exitosamente, revise su correo para confirmar su cuenta'};
             }
         }
-        this.exceptions.badRequestException({ message: 'Ya existe un usuario con el mismo correo, nombre, apellido o número de documento'});
+        this.exceptions.badRequestException({ message: 'Datos de registro incorrectos'});
     }
 
     public async iniciarSesion(usuario: DeepPartial<T>, jwtService: JwtService): Promise<Object> {
@@ -94,7 +92,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
         }
 
         const token_auth = this.getToken({uuid: usuarioAIniciarSesion.uuid}, jwtService);
-        const is_admin = usuarioAIniciarSesion.id_rol === 1 ? true : false;
+        const is_admin = usuarioAIniciarSesion.id_rol === 1;
         return { ...usuarioAIniciarSesion, token_auth, is_admin  };
 
     }
@@ -123,7 +121,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
 
         if(usuario){
             // @ts-ignore
-            const usuarioActualizado : Usuario = await this.update(usuario.uuid, { is_active: true, codigo_de_verificacion: generateCodeAuth() });
+            await this.update(usuario.uuid, { is_active: true, codigo_de_verificacion: generateCodeAuth() });
             return { message: 'Cuenta confirmada exitosamente'};
         }
         this.exceptions.forbiddenException({ message: 'El código de verificación no es válido' });

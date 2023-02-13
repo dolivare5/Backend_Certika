@@ -4,6 +4,7 @@ import { CrearLibroDto } from './dto/crear-prestamo.dto';
 import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Prestamo} from "../../framework/database/mysql/entities";
 import { Auth } from '../usuario/decorators/auth.decorator';
+import { RolesPermitidos } from '../usuario/interfaces/roles-permitidos';
 
 @ApiTags("Prestamos")
 @Controller('prestamos')
@@ -45,6 +46,7 @@ export class PrestamoController {
         return this.prestamoService.obtenerPrestamosDeUnUsuario(+req.user.id);
     }
 
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({status: 200, description: 'La lista de prestamos ha sido devuelta correctamente.', type: Prestamo, isArray: true})
     @ApiResponse({status: 400, description: 'Bad Request: Verifique los datos de entrada'})
     @ApiResponse({status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción'})

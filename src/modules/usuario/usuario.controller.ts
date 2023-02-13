@@ -2,9 +2,11 @@ import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 import { Controller, Post, Body, Query, BadRequestException, Req, Res, Get } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { UsuarioService } from './usuario.service';
-import { Usuario } from '../../framework/database/mysql/entities/usuario.entity';
+import { Usuario } from "../../framework/database/mysql/entities";
 import { IniciarSesionDto } from './dto/iniciar_sesion.dto';
 import { ActualizarUsuarioDto } from './dto/actualizar-usuario.dto';
+import { Auth } from './decorators/auth.decorator';
+import { RolesPermitidos } from './interfaces/roles-permitidos';
 
 @Controller('usuarios')
 @ApiTags('Usuario')
@@ -22,7 +24,7 @@ export class UsuarioController {
         return this.usuarioService.registrarUsuario(crearUsuarioDto);
     }
 
-
+    @Auth()
     @ApiResponse({ status: 201, description: 'Información de usuario recuperada correctamente', type: Usuario })
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -34,6 +36,7 @@ export class UsuarioController {
     }
 
 
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Datos de Usuarios recuperados correctamente', type: Usuario, isArray: true })
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -44,6 +47,7 @@ export class UsuarioController {
         return this.usuarioService.recuperarTodosLosUsuarios();
     }
 
+    @Auth()    
     @ApiResponse({ status: 201, description: 'Información de listado de seesiones exportada correctamentes'})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -61,6 +65,7 @@ export class UsuarioController {
     }
 
 
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Exportar sesiones de los usuarios'})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -103,7 +108,7 @@ export class UsuarioController {
         return this.usuarioService.iniciarSesion(iniciarSesionDto, req.ip);
     }
 
-
+    @Auth()
     @ApiResponse({ status: 201, description: 'Sesión cerrada correctamente', type: Usuario })
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -116,7 +121,7 @@ export class UsuarioController {
         return this.usuarioService.cerrarSesion(token);
     }
 
-
+    @Auth()
     @ApiResponse({ status: 201, description: 'Datos de usuario actualizados correctamente', type: Usuario })
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
