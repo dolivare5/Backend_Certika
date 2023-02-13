@@ -23,7 +23,15 @@ export class UserRoleGuard implements CanActivate {
             const pathUrl = context.switchToHttp().getRequest().url;
             const user = context.switchToHttp().getRequest().user as Usuario;
             context.switchToHttp().getRequest().url;
-            const token = context.switchToHttp().getRequest().rawHeaders[1].split(' ')[1];
+            let token = context.switchToHttp().getRequest().rawHeaders[1].split(' ')[1];
+            if (token === undefined) {
+                token = context.switchToHttp().getRequest().rawHeaders[5].split(' ')[1];
+                if (token === undefined) {
+                    this.exceptionService.forbiddenException({message: 'Se requiere un token de autenticación'});
+                    return false;
+                }
+            }
+            
             console.log('token', token);
             const tipoDeUsuario = (await this.servicioDeBaseDeDatos.usuario.executeQuery(`
                 SELECT vp.id, LOWER(vp.nombre) AS rol FROM usuario u
