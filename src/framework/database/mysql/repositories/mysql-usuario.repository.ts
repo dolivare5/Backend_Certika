@@ -16,9 +16,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> implements IRepositorioUsuario<T>{
-    public async registrarUsuario(usuario: DeepPartial<T>, mailerService: MailerService): Promise<Object> {
-        console.log('Creando usuario');
-        
+    public async registrarUsuario(usuario: DeepPartial<T>, mailerService: MailerService): Promise<Object> {        
         const { password, ...datosDelUsuario } = usuario as CrearUsuarioDto;
         // @ts-ignore
         const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento} AND id_parametro = 3`)).length > 0;
@@ -92,7 +90,8 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
         }
 
         const token_auth = this.getToken({uuid: usuarioAIniciarSesion.uuid}, jwtService);
-        const is_admin = usuarioAIniciarSesion.id_rol === 1;
+        const is_admin = +usuarioAIniciarSesion.id_rol === 3;
+        
         return { ...usuarioAIniciarSesion, token_auth, is_admin  };
 
     }
