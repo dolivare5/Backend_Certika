@@ -1,10 +1,11 @@
-import {BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post} from "@nestjs/common";
 import { ValorParametroService } from './valor_parametro.service';
 import { CrearValorParametroDto } from './dto/crear-valor_parametro.dto';
 import { ActualizarValorParametroDto } from './dto/actualizar-valor_parametro.dto';
-import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import { ApiResponse, ApiTags} from "@nestjs/swagger";
 import {ValorParametro} from "../../framework/database/mysql/entities";
 import { Auth } from '../usuario/decorators/auth.decorator';
+import { RolesPermitidos } from '../usuario/interfaces/roles-permitidos';
 
 @ApiTags("Valores Parámetros")
 @Controller('valores_parametros')
@@ -12,6 +13,7 @@ import { Auth } from '../usuario/decorators/auth.decorator';
 export class ValorParametroController {
     constructor(private readonly valorParametroService: ValorParametroService) {}
     
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Valor Parámetro creado correctamente.', type: ValorParametro})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -34,6 +36,7 @@ export class ValorParametroController {
     }
 
     
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Valor Parámetro actualizado correctamente.', type: ValorParametro})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })

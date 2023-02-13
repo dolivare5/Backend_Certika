@@ -1,6 +1,4 @@
 import {
-    BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
     OneToMany,
@@ -75,7 +73,7 @@ export class Usuario {
     })
     @Column('varchar', {
         nullable: false,
-        length: 10,
+        length: 30,
         unique: true,
     })
     nro_documento!: string;

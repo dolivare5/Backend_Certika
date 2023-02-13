@@ -1,10 +1,11 @@
-import {BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query} from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post} from "@nestjs/common";
 import { LibroService } from './libro.service';
 import { CrearLibroDto } from './dto/crear-libro.dto';
 import { ActualizarLibroDto } from './dto/actualizar-libro.dto';
-import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import { ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Libro} from "../../framework/database/mysql/entities";
 import { Auth } from '../usuario/decorators/auth.decorator';
+import { RolesPermitidos } from '../usuario/interfaces/roles-permitidos';
 
 @ApiTags("Libros")
 @Controller('libros')
@@ -13,6 +14,7 @@ export class LibroController {
 
     constructor(private readonly libroService: LibroService) {}
 
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({status: 201, description: 'El libro ha sido creado correctamente', type: Libro})
     @ApiResponse({status: 400, description: 'Bad Request: Verifique los datos de entrada'})
     @ApiResponse({status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción'})
@@ -44,6 +46,7 @@ export class LibroController {
     }
 
 
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({status: 200, description: 'El libro ha sido actualizado correctamente', type: Libro})
     @ApiResponse({status: 400, description: 'Bad Request: Verifique los datos de entrada'})
     @ApiResponse({status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción'})

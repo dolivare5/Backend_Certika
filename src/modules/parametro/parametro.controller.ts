@@ -1,17 +1,19 @@
-import { Auth } from './../usuario/decorators/auth.decorator';
+import { Auth } from "../usuario/decorators/auth.decorator";
 import { BadRequestException, Body, Controller, Get, Patch, Post, Query, Param, ParseIntPipe } from '@nestjs/common';
 import { ParametroService } from './parametro.service';
 import { CrearParametroDto } from './dto/crear-parametro.dto';
 import { ActualizarParametroDto } from './dto/actualizar-parametro.dto';
 import {ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Parametro} from "../../framework/database/mysql/entities";
+import { RolesPermitidos } from '../usuario/interfaces/roles-permitidos';
 
 @ApiTags("Parametros")
 @Controller('parametros')
 @Auth()
 export class ParametroController {
     constructor(private readonly parametroService: ParametroService) {}
-    
+
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Parámetro creado correctamente.', type: Parametro})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
@@ -53,7 +55,7 @@ export class ParametroController {
     }
     
     
-    
+    @Auth(RolesPermitidos.administrador)
     @ApiResponse({ status: 201, description: 'Parámetro actualizado correctamente.', type: Parametro})
     @ApiResponse({ status: 400, description: 'Bad Request: Verifique los datos de entrada' })
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
