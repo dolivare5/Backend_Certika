@@ -5,6 +5,7 @@ import {ExceptionsService} from "../../../config/exceptions/exceptions.service";
 import {Reflector} from "@nestjs/core";
 import {META_ROLES} from "../decorators/role-protected.decorator";
 import { RolesPermitidos } from '../interfaces/roles-permitidos';
+import { Usuario } from "../../../framework/database/mysql/entities";
 
 @Injectable()
 export class UserRoleGuard implements CanActivate {
@@ -17,6 +18,9 @@ export class UserRoleGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const asyncFunction = async () => {
             let roles_permitidos: string[] = this.reflector.get(META_ROLES, context.getHandler());
+            console.log(context.switchToHttp().getRequest());
+            const pathUrl = context.switchToHttp().getRequest().url;
+            const user = context.switchToHttp().getRequest().user as Usuario;
             context.switchToHttp().getRequest().url;
             const token = context.switchToHttp().getRequest().rawHeaders[1].split(' ')[1];
             console.log('token', token);
