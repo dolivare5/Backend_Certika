@@ -17,8 +17,6 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> implements IRepositorioUsuario<T>{
     public async registrarUsuario(usuario: DeepPartial<T>, mailerService: MailerService): Promise<Object> {
-        console.log('Creando usuario');
-        
         const { password, ...datosDelUsuario } = usuario as CrearUsuarioDto;
         // @ts-ignore
         const existTypeDocument = (await this.executeQuery(`SELECT * FROM valor_parametro WHERE id = ${datosDelUsuario.id_tipo_documento} AND id_parametro = 3`)).length > 0;
@@ -61,6 +59,9 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
         if(correo && password){
             // @ts-ignore
             usuarioAIniciarSesion = await this.findOne({ where: { correo}}) as Usuario;
+            console.log(usuarioAIniciarSesion);
+            // Muestro la contraseña pero desencriptada
+            console.log(bcrypt.compareSync(password, usuarioAIniciarSesion.password));
             if(!usuarioAIniciarSesion || !bcrypt.compareSync(password, usuarioAIniciarSesion.password)){
                 this.exceptions.badRequestException({message: 'Datos de inicio de sesión incorrectos'});
             }
