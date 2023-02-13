@@ -18,7 +18,7 @@ export class UserRoleGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const asyncFunction = async () => {
             let roles_permitidos: string[] = this.reflector.get(META_ROLES, context.getHandler());
-            console.log(context.switchToHttp().getRequest());
+            console.log(context.switchToHttp().getRequest().rawHeaders);
             const pathUrl = context.switchToHttp().getRequest().url;
             const user = context.switchToHttp().getRequest().user as Usuario;
             context.switchToHttp().getRequest().url;
