@@ -282,7 +282,7 @@ export class MysqlRepositorioGenerico<T> implements IRepositorioGenerico<T> {
     async sendMail(sendEmail: SendEmailInterface, mailerService: MailerService, ruta: string) {
         const {mail, action, subject, template, name, codigo_de_verificacion, from_email, method} = sendEmail;
 
-        const url = new URL(`${EnvConfiguration().UrlFront}/${ruta}`);
+        const url = new URL(`${EnvConfiguration().UrlFront}/${ruta}/${codigo_de_verificacion}`);
         await mailerService.sendMail({
             to: `${mail}`,
             from: ` "Support Team"  <${from_email}>`,
