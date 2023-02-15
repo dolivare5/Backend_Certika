@@ -18,6 +18,8 @@ export class UserRoleGuard implements CanActivate {
         const asyncFunction = async () => {
             let roles_permitidos: string[] = this.reflector.get(META_ROLES, context.getHandler());
             context.switchToHttp().getRequest().url;
+            console.log(context.switchToHttp().getRequest());
+            
             let token =
               context.switchToHttp().getRequest().rawHeaders[1].split(' ')[1] ||
               context.switchToHttp().getRequest().rawHeaders[5].split(' ')[1];
