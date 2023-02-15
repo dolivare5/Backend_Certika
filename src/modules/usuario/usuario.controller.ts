@@ -87,7 +87,7 @@ export class UsuarioController {
     @ApiResponse({ status: 401, description: 'Unauthorized: No tiene permisos para realizar esta acción' })
     @ApiResponse({ status: 403, description: 'Forbidden: Verifique que el token de autenticación sea válido y que no halla expirado.' })
     @ApiResponse({ status: 404, description: 'Not Found: El código de usuario no existe' })
-    @Put('confirmar_cuenta')
+    @Put('confirmar_cuenta/:codigo_de_verificacion')
     confirmarCuenta(@Param('codigo_de_verificacion') codigo_de_verificacion: string) {
         if (codigo_de_verificacion) {
             return this.usuarioService.confirmarCuenta(codigo_de_verificacion);
