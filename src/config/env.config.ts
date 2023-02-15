@@ -14,4 +14,6 @@ export const EnvConfiguration = () => ({
     emailUser: process.env.EMAIL_USER,
     emailPassword: process.env.EMAIL_PASSWORD,
     emailFrom: process.env.EMAIL_FROM,
+    UrlFront: process.env.URL_FRONT,
+    UrlConfirmAccount: process.env.URL_CONFIRMATION,
 })

@@ -96,31 +96,7 @@
                                             beneficios que tenemos para ti.
                                         </p>
                                         <p>Antes de empezar a disfrutar de nuestros servicios, necesitamos que confirmes tu correo electrónico haciendo clic en el siguiente enlace:</p>
-                                        <form id="confirmation-form" action="{{url}}" method="post" target="_blank">
-                                            <button type="submit" formtarget="_blank" style="cursor: pointer; border: 0; text-decoration: none; display: inline-block; border-radius: 4px; background-color: #55b9f3; padding: 20px 26px;text-align: center; font-size: 16px; font-weight: 600; color: #fff">Confirmar la dirección de correo electrónico &rarr;</button>
-                                        </form>
-
-                                        <script>
-                                            document.getElementById("confirmation-form").addEventListener("submit", function(event) {
-                                                event.preventDefault();
-
-                                                const form = event.target;
-                                                const url = form.action;
-                                                const data = new FormData(form);
-
-                                                const options = {
-                                                    method: 'post',
-                                                    body: data
-                                                };
-
-                                                fetch(url, options)
-                                                        .then(response => response.json())
-                                                        .then(data => {
-                                                            window.open(url, "_blank");
-                                                        });
-                                            });
-                                        </script>
-
+                                        <a href="{{url}}" target="_blank" style="cursor: pointer; border: 0; text-decoration: none; display: inline-block; border-radius: 4px; background-color: #55b9f3; padding: 20px 26px;text-align: center; font-size: 16px; font-weight: 600; color: #fff">Confirmar la dirección de correo electrónico &rarr;</a>
                                         <p class="sm-leading-8"
                                            style="margin: 0 0 24px;font-size: 18px; color: #000;">
                                             ¡Una vez que hayas confirmado tu correo, podrás acceder a todos nuestros servicios y empezar a disfrutar de todo lo que library store tiene para ofrecerte.

@@ -3,4 +3,6 @@ import { MysqlRepositorioGenerico } from "./mysql-generico.repository";
 import { IRepositorioAutor } from "../core/abstract";
 
 @Injectable()
-export class MysqlRepositorioEditorial<T> extends MysqlRepositorioGenerico<T> implements IRepositorioAutor<T> {}
+export class MysqlRepositorioEditorial<T> extends MysqlRepositorioGenerico<T> implements IRepositorioAutor<T> {
+   
+}

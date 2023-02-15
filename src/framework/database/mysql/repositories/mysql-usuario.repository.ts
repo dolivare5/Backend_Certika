@@ -45,7 +45,7 @@ export class MysqlRepositorioUsuario<T> extends MysqlRepositorioGenerico<T> impl
                     method: methods.patch
                 }
         
-                await this.sendMail(mail, mailerService);
+                await this.sendMail(mail, mailerService, EnvConfiguration().UrlConfirmAccount);
                 return { message: 'Usuario registrado exitosamente, revise su correo para confirmar su cuenta'};
             }
         }

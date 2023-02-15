@@ -14,4 +14,6 @@ export const JoiValidationSchema = Joi.object({
     EMAIL_USER: Joi.string().required(),
     EMAIL_PASSWORD: Joi.string().required(),
     EMAIL_FROM: Joi.string().required(),
+    URL_FRONT: Joi.string().required(),
+    URL_CONFIRMATION: Joi.string().required(),
 });

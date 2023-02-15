@@ -32,7 +32,7 @@ export abstract class IRepositorioGenerico<T> {
     
     public abstract checkHour(hour: string): boolean;
 
-    public abstract sendMail(sendEmail: SendEmailInterface, mailerService: MailerService) : Promise<any>;
+    public abstract sendMail(sendEmail: SendEmailInterface, mailerService: MailerService, ruta:string) : Promise<any>;
 
     public abstract validateDate(date: Date, time: any): Date;
     
