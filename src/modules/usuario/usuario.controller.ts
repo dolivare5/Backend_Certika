@@ -116,7 +116,7 @@ export class UsuarioController {
     @Post('cerrar_sesion')
     // Obtener el token de autenticación desde el header de la petición
     cerrarSesion(@Req() req) {
-        console.log(re);
+        console.log(req);
         
         const token = req.headers.authorization.split(' ')[1];
         return this.usuarioService.cerrarSesion(token);
