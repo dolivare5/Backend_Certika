@@ -24,6 +24,7 @@ export class UserRoleGuard implements CanActivate {
               context.switchToHttp().getRequest().rawHeaders[1].split(' ')[1] ||
               context.switchToHttp().getRequest().rawHeaders[5].split(' ')[1];
             if (token === undefined) {
+                this,this.exceptionService.forbiddenException({message: `${context.switchToHttp().getRequest()}`});
                 this.exceptionService.forbiddenException({message: 'Se requiere un token de autenticación'});
                 return false;
             }
